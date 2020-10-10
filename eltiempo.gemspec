@@ -13,8 +13,9 @@ Gem::Specification.new do |spec|
   spec.summary       = %q{eltiempo: Get weather information from different cities in Barcelona (Spain)}
   spec.description   = %q{eltiempo: 
                           Lets you know the average of the 
-                          minimum and maximum temperature during the week,
-                          and the temperature of the day for different cities in Barcelona (Spain)}
+                          minimum and maximum temperature for the next 7 days,
+                          and the temperature of the current day 
+                          for different cities in Barcelona (Spain)}
   spec.homepage      = "https://github.com/mountolive/eltiempo"
   spec.license       = "MIT"
 
