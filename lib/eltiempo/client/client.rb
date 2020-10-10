@@ -14,11 +14,11 @@ module Eltiempo
     @@base_url = new_url
   end
 
-  class TiempoClient
+  class Client
     @@api_key = ENV['TIEMPO_API_KEY']
     @@api_url = "#{self.base_url}?affiliate_id=#{@@api_key}"
 
-    def self.api_url?
+    def self.api_key?
       !!@@api_key
     end
 

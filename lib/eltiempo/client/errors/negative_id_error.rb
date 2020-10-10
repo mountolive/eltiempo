@@ -2,7 +2,7 @@
 
 module Eltiempo
   class NegativeIdError < StandardError
-    def initialize(msg='The id passed can\'t be negative')
+    def initialize(msg = 'The id passed can\'t be negative')
       super
     end
   end

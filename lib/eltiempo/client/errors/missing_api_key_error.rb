@@ -2,7 +2,7 @@
 
 module Eltiempo
   class MissingApiKeyError < StandardError
-    def initialize(msg='Please set TIEMPO_API_KEY env variable')
+    def initialize(msg = 'Please set TIEMPO_API_KEY env variable')
       super
     end
   end

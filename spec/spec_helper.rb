@@ -1,5 +1,12 @@
+# frozen_string_literal: true
+
 require "bundler/setup"
+require 'dotenv'
 require "eltiempo"
+require 'vcr'
+
+# Loading environment variables
+Dotenv.load
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -11,4 +18,11 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+end
+
+# Retrieves the recorded responses if they're not already in the
+# specified location
+VCR.configure do |config|
+  config.config_cassette_library_dir = 'spec/fixtures/eltiempo'
+  config.hook_into :webmock
 end
