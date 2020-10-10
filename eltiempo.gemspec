@@ -8,14 +8,14 @@ Gem::Specification.new do |spec|
   spec.version       = Eltiempo::VERSION
   spec.authors       = ["Leo Guercio"]
   spec.email         = ["lpguercio@gmail.com"]
-  spec.platform      = Gem::Platform::Ruby
+  spec.platform      = Gem::Platform::RUBY
 
-  spec.summary       = %q{eltiempo: Get weather information from different parts of the world}
+  spec.summary       = %q{eltiempo: Get weather information from different cities in Barcelona (Spain)}
   spec.description   = %q{eltiempo: 
                           Lets you know the average of the 
                           minimum and maximum temperature during the week,
-                          and the temperature of the day for different parts of the world}
-  spec.homepage      = "github.com/mountolive/eltiempo"
+                          and the temperature of the day for different cities in Barcelona (Spain)}
+  spec.homepage      = "https://github.com/mountolive/eltiempo"
   spec.license       = "MIT"
 
   spec.files         = Dir.chdir(File.expand_path('..', __FILE__)) do
@@ -25,7 +25,9 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "bundler", "~> 1.16"
-  spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_development_dependency "bundler", "~> 2.1.2"
+  spec.add_development_dependency "rake", "~> 13.0.1"
+  spec.add_development_dependency "rspec", "~> 3.9.0"
+  spec.add_development_dependency "vcr", "~> 6.0.0"
+  spec.add_development_dependency "nokogiri", "~> 1.10.10"
 end
