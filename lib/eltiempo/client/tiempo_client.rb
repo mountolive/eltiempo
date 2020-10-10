@@ -3,7 +3,7 @@
 require 'errors'
 require 'parser'
 
-module Tiempo
+module Eltiempo
   @@base_url = 'https://api.tiempo.com/index.php'
 
   def self.base_url
