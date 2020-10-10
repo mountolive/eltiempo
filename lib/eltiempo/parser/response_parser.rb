@@ -3,12 +3,14 @@
 require 'json'
 require 'nokogiri'
 
-module ResponseParser
-  def from_xml(xmldata)
-    # TODO Implement
-  end
+module Tiempo
+  class ResponseParser
+    def from_xml(xmldata)
+      # TODO Implement
+    end
 
-  def from_json(jsondata)
-    # TODO Implement
+    def from_json(jsondata)
+      # TODO Implement
+    end
   end
 end

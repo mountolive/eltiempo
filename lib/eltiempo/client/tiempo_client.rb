@@ -1,19 +1,38 @@
 # frozen_string_literal: true
 
-BASE_URL = 'https://api.tiempo.com/index.php'
+require 'errors'
+require 'parser'
 
-class TiempoClient
-  @@api_key = ENV['TIEMPO_API_KEY']
-  @@api_url = "#{BASE_URL}?affiliate_id=#{@@api_key}"
+module Tiempo
+  @@base_url = 'https://api.tiempo.com/index.php'
 
-  include ResponseParser
-
-  def get_division(division_id)
-    # TODO It's going to return the basic Division
+  def self.base_url
+    @@base_url
   end
 
-  def get_location_weather(location_id)
-    # TODO Will return a WeekWeather instance
+  def self.base_url=(new_url)
+    @@base_url = new_url
+  end
+
+  class TiempoClient
+    @@api_key = ENV['TIEMPO_API_KEY']
+    @@api_url = "#{self.base_url}?affiliate_id=#{@@api_key}"
+
+    def self.api_url?
+      !!@@api_key
+    end
+
+    def initialize
+      @parser = ResponseParser.new
+    end
+
+    def get_division(division_id)
+      # TODO It's going to return the basic Division
+    end
+
+    def get_location_weather(location_id)
+      # TODO Will return a WeekWeather instance
+    end
   end
 end
 
