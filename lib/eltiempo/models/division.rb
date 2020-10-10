@@ -11,7 +11,7 @@ module Eltiempo
     end
 
     def has_locations?
-      !!@locations
+      !!@locations && !@locations.empty?
     end
   end
 end

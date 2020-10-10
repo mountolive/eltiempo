@@ -2,7 +2,7 @@
 
 require 'spec_helper.rb'
 
-describe 'Client' do
+describe 'Eltiempo::Client' do
   before(:all) do
     @client = Eltiempo::Client.new
     @non_existing = 9999999999
@@ -16,28 +16,38 @@ describe 'Client' do
   context 'get_division' do
     it 'should error if api_key is not set' do
       allow(Eltiempo::Client).to receive(:api_key?).and_return(false)   
-      expect(@client.get_division(@division_id)).to raise_error(MissingApiKeyError)
+      expect(@client.get_division(@division_id)).to(
+        raise_error(Eltiempo::MissingApiKeyError)
+      )
     end
 
     it 'should error if api_key is invalid' do
       ENV['TIEMPO_API_KEY'] = @wrong_key
       local_client = Eltiempo::Client.new
       VCR.use_cassette('wrong-api-key') do
-        expect(local_client.get_division(@division_id)).to raise_error(StandardApiError)
+        expect(local_client.get_division(@division_id)).to(
+          raise_error(Eltiempo::StandardApiError)
+        )
       end
     end
 
     it 'should error for non-numeric division_id' do
-      expect(@client.get_division(@non_numeric)).to raise_error(NonNumericIdError)
+      expect(@client.get_division(@non_numeric)).to(
+        raise_error(Eltiempo::NonNumericIdError)
+      )
     end
 
     it 'should error for negative division_id' do
-      expect(@client.get_division(@negative)).to raise_error(NegativeIdError)
+      expect(@client.get_division(@negative)).to(
+        raise_error(Eltiempo::Eltiempo::NegativeIdError)
+      )
     end
 
     it 'should error for non-existing division_id' do
       VCR.use_cassette('wrong-division-id') do
-        expect(@client.get_division(@non_existing)).to raise_error(StandardApiError)
+        expect(@client.get_division(@non_existing)).to(
+          raise_error(Eltiempo::StandardApiError)
+        )
       end
     end
 
@@ -53,29 +63,38 @@ describe 'Client' do
   context 'get_location_weather' do
     it 'should error if api_key is not set' do
       allow(Eltiempo::Client).to receive(:api_key?).and_return(false)   
-      expect(@client.get_location_weather(@location_id)).to raise_error(MissingApiKeyError)
+      expect(@client.get_location_weather(@location_id)).to(
+        raise_error(Eltiempo::MissingApiKeyError)
+      )
     end
 
     it 'should error if api_key is invalid' do
       ENV['TIEMPO_API_KEY'] = @wrong_key
       local_client = Eltiempo::Client.new
       VCR.use_cassette('wrong-api-key') do
-        expect(local_client.get_location_weather(@location_id)).to raise_error(StandardApiError)
+        expect(local_client.get_location_weather(@location_id)).to(
+          raise_error(Eltiempo::StandardApiError)
+        )
       end
     end
 
-
     it 'should error for non-numeric location_id' do
-      expect(@client.get_location_weather(@non_numeric)).to raise_error(NonNumericError)
+      expect(@client.get_location_weather(@non_numeric)).to(
+        raise_error(Eltiempo::NonNumericError)
+      )
     end
 
     it 'should error for negative location_id' do
-      expect(@client.get_location_weather(@negative)).to raise_error(NegativeIdError)
+      expect(@client.get_location_weather(@negative)).to(
+        raise_error(Eltiempo::NegativeIdError)
+      )
     end
 
     it 'should error for non-existing location_id' do
       VCR.use_cassette('wrong-location-id') do
-        expect(@client.get_location_weather(@non_existing)).to raise_error(StandardApiError)
+        expect(@client.get_location_weather(@non_existing)).to(
+          raise_error(Eltiempo::StandardApiError)
+        )
       end
     end
 

@@ -5,11 +5,15 @@ require 'nokogiri'
 
 module Eltiempo
   class ResponseParser
-    def from_xml(xmldata)
+    def locations_from_xml(xmldata)
       # TODO Implement
     end
 
-    def from_json(jsondata)
+    def daysweather_from_json(jsondata)
+      # TODO Implement
+    end
+
+    def daysweather_from_xml(xmldata)
       # TODO Implement
     end
   end

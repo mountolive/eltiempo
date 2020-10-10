@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
 module Eltiempo
-  class WeekWeather
+  class DaysGroupWeather
     attr_reader :days
 
-    def today_temperature
+    def initialize(days)
+      @days = days
+    end
+
+    def todays_temperature
       # TODO Implement
     end
 

@@ -1,0 +1,25 @@
+# frozen_string_literal: true
+
+require 'spec_helper.rb'
+
+describe 'Eltiempo::DayWeather' do
+  context '#new' do
+    it 'should throw error when min_temp is greater than max_temp' do
+      expect(Eltiempo::DayWeather.new(20, 19)).to raise_error(Eltiempo::WrongTemperaturesError)
+    end
+
+    it 'should instantiate DayWeather correctly' do
+      day = Eltiempo::DayWeather.new 19, 20
+      expect(day).not_to be nil
+      expect(day.min_temp).to eq 19
+      expect(day.max_temp).to eq 20
+    end
+  end
+
+  context 'average_temperature' do
+    it 'should return proper avg temperature' do
+      day = Eltiempo::DayWeather.new 10, 20
+      expect(day.average_temperature).to eq 15
+    end
+  end
+end

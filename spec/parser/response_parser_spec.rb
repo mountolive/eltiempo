@@ -2,16 +2,11 @@
 
 require 'spec_helper.rb'
 
-describe 'ResponseParser' do
+describe 'Eltiempo::ResponseParser' do
   before(:all) do
     # For comparison
-    day = Eltiempo::DayWeather.new
-    day.min_temp = 20
-    day.max_temp = 32
-    @days = [day]
-    @week = Eltiempo::WeekWeather.new
-    @week.days = @days
-    @location = [Eltiempo::Location.new('Abrera', 1182, '')]
+    @day = Eltiempo::DayWeather.new(15, 20)
+    @location = Eltiempo::Location.new('Abrera', 1182, '')
     @errored = Eltiempo::ApiErrorDto.new 'ERROR'
  
     #Strings
@@ -26,12 +21,15 @@ describe 'ResponseParser' do
         </location>
       </report>
     }
-    @error_res = %q{
+    @error_res_xml = %q{
       <report>
         <error>ERROR</error>
       </report>
     }
-    @weather_res = %q{
+    @error_res_json = %q{
+    {"status":1,"error":"ERROR"}
+    }
+    @weather_res_json = %q{
       {
         "status": 0,
         "location": "Abrera [Provincia de Barcelona;España]",
@@ -44,6 +42,89 @@ describe 'ResponseParser' do
         }
       }
     }
+    @weather_res_xml = %q{
+      <report>
+        <location city="Abrera [Provincia de Barcelona;España]">
+          <interesting>
+            <url description="Predicción">https://www.tiempo.com/abrera.htm</url>
+          </interesting>
+          <var>
+            <name>Temperatura Mínima</name>
+            <icon>4</icon>
+            <data>
+              <forecast data_sequence="1" value="15"/>
+            </data>
+          </var>
+          <var>
+            <name>Temperatura Máxima</name>
+            <icon>5</icon>
+            <data>
+              <forecast data_sequence="1" value="20"/>
+            </data>
+          </var>
+        </location>
+      </report>
+    }
+
+    # The parser
+    @parser = Eltiempo::ResponseParser.new
   end
 
+  context 'locations_from_xml' do
+    it 'should create ApiErrorDto from api\'s error' do
+      parsed_value = @parser.locations_from_xml(@error_res_xml)
+      expect(parsed_value).to be_a(Eltiempo::ApiErrorDto)
+      expect(parsed_value.error).to eq @errored.error
+    end
+
+    it 'should create Locations from division xml' do
+      parsed_value = @parser.locations_from_xml(@division_res)
+      expect(parsed_value).not_to be_a(Eltiempo::ApiErrorDto)
+      expect(parsed_value).to be_a(Array)
+      expect(parsed_value.size).to eq 1
+      location = parsed_value.first
+      expect(location).not_to be nil
+      expect(location.id).to eq @location.id
+      expect(location.name).to eq @location.name
+      expect(location.url).to eq @location.url
+      expect(location.week_weather).to be_a(Array)
+    end
+  end
+
+  context 'daysweather_from_xml' do
+    it 'should create ApiErrorDto from api\'s error' do
+      parsed_value = @parser.daysweather_from_xml(@error_res_xml)
+      expect(parsed_value).to be_a(Eltiempo::ApiErrorDto)
+      expect(parsed_value.error).to eq @errored.error
+    end
+
+    it 'should create DaysGroupWeather from location xml' do
+      parsed_value = @parser.daysweather_from_xml(@weather_res_xml)
+      check_weekweather(parsed_value, @day)
+    end
+  end
+
+  context 'daysweather_from_json' do
+    it 'should create ApiErrorDto from api\'s error' do
+      parsed_value = @parser.daysweather_from_json(@error_res_json)
+      expect(parsed_value).to be_a(Eltiempo::ApiErrorDto)
+      expect(parsed_value.error).to eq @errored.error
+    end
+
+    it 'should create DaysGroupWeather from location json' do
+      parsed_value = @parser.daysweather_from_json(@weather_res_json)
+      check_weekweather(parsed_value, @day)
+    end
+  end
+end
+
+def check_weekweather(parsed_value, expected_day)
+  expect(parsed_value).not_to be_a(Eltiempo::ApiErrorDto)
+  expect(parsed_value).to be_a(Eltiempo::DaysGroupWeather)
+  expect(parsed_value.days).to be_a(Array)
+  expect(parsed_value.days.size).to eq 1
+  day = parsed_value.days.first
+  expect(day).not_to be nil
+  expect(day.min_temp).to eq expected_day.min_tmp
+  expect(day.max_tmp).to eq expected_day.max_tmp
 end
