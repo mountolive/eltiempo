@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Tiempo
+module Eltiempo
   class Location
     attr_accessor :week_weather
 

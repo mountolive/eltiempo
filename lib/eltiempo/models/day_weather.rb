@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Tiempo
+module Eltiempo
   class DayWeather
     attr_accessor :min_temp, :max_tmp
 

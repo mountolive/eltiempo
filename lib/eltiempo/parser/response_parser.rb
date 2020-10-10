@@ -3,7 +3,7 @@
 require 'json'
 require 'nokogiri'
 
-module Tiempo
+module Eltiempo
   class ResponseParser
     def from_xml(xmldata)
       # TODO Implement
