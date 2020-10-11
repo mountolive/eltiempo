@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
-require 'spec_helper.rb'
+require 'eltiempo/models/day_weather'
+require 'eltiempo/models/days_group_weather'
+
+require 'spec_helper'
 
 describe 'Eltiempo::DaysGroupWeather' do
   before(:all) do

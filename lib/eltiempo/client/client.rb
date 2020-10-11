@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require 'errors'
-require 'parser'
+require 'eltiempo/parser/response_parser'
 
 module Eltiempo
   @@base_url = 'https://api.tiempo.com/index.php'
@@ -16,14 +15,14 @@ module Eltiempo
 
   class Client
     @@api_key = ENV['TIEMPO_API_KEY']
-    @@api_url = "#{self.base_url}?affiliate_id=#{@@api_key}"
+    @@api_url = "#{Eltiempo::base_url}?affiliate_id=#{@@api_key}"
 
     def self.api_key?
       !!@@api_key
     end
 
     def initialize
-      @parser = ResponseParser.new
+      @parser = Eltiempo::ResponseParser.new
     end
 
     def get_division(division_id)

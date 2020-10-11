@@ -13,5 +13,10 @@ module Eltiempo
     def has_locations?
       !!@locations && !@locations.empty?
     end
+
+    def get_location(name)
+      return nil unless has_locations?
+      @locations[name.downcase]
+    end
   end
 end

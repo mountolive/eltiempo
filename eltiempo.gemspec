@@ -32,4 +32,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "vcr", "~> 6.0.0"
   spec.add_development_dependency "nokogiri", "~> 1.10.10"
   spec.add_development_dependency "dotenv", "~> 2.7.0"
+  spec.add_development_dependency "simplecov", "~> 0.19.0"
+  spec.add_development_dependency "webmock", "~> 3.9.1"
 end

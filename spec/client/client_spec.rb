@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
-require 'spec_helper.rb'
+require 'eltiempo/client/client'
+require 'eltiempo/client/errors/missing_api_key_error'
+require 'eltiempo/client/errors/negative_id_error'
+require 'eltiempo/client/errors/non_numeric_id_error'
+require 'eltiempo/client/errors/standard_api_error'
+
+require 'spec_helper'
 
 describe 'Eltiempo::Client' do
   before(:all) do
@@ -39,7 +45,7 @@ describe 'Eltiempo::Client' do
 
     it 'should error for negative division_id' do
       expect(@client.get_division(@negative)).to(
-        raise_error(Eltiempo::Eltiempo::NegativeIdError)
+        raise_error(Eltiempo::NegativeIdError)
       )
     end
 
@@ -80,7 +86,7 @@ describe 'Eltiempo::Client' do
 
     it 'should error for non-numeric location_id' do
       expect(@client.get_location_weather(@non_numeric)).to(
-        raise_error(Eltiempo::NonNumericError)
+        raise_error(Eltiempo::NonNumericIdError)
       )
     end
 

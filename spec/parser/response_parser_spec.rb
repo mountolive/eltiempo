@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
-require 'spec_helper.rb'
+require 'spec_helper'
+require 'eltiempo/models/location'
+require 'eltiempo/models/day_weather'
+require 'eltiempo/models/days_group_weather'
+require 'eltiempo/parser/api_error_dto'
+require 'eltiempo/parser/response_parser'
 
 describe 'Eltiempo::ResponseParser' do
   before(:all) do
@@ -71,12 +76,6 @@ describe 'Eltiempo::ResponseParser' do
   end
 
   context 'locations_from_xml' do
-    it 'should create ApiErrorDto from api\'s error' do
-      parsed_value = @parser.locations_from_xml(@error_res_xml)
-      expect(parsed_value).to be_a(Eltiempo::ApiErrorDto)
-      expect(parsed_value.error).to eq @errored.error
-    end
-
     it 'should create Locations from division xml' do
       parsed_value = @parser.locations_from_xml(@division_res)
       expect(parsed_value).not_to be_a(Eltiempo::ApiErrorDto)
@@ -92,12 +91,6 @@ describe 'Eltiempo::ResponseParser' do
   end
 
   context 'daysweather_from_xml' do
-    it 'should create ApiErrorDto from api\'s error' do
-      parsed_value = @parser.daysweather_from_xml(@error_res_xml)
-      expect(parsed_value).to be_a(Eltiempo::ApiErrorDto)
-      expect(parsed_value.error).to eq @errored.error
-    end
-
     it 'should create DaysGroupWeather from location xml' do
       parsed_value = @parser.daysweather_from_xml(@weather_res_xml)
       check_weekweather(parsed_value, @day)
@@ -105,15 +98,33 @@ describe 'Eltiempo::ResponseParser' do
   end
 
   context 'daysweather_from_json' do
-    it 'should create ApiErrorDto from api\'s error' do
-      parsed_value = @parser.daysweather_from_json(@error_res_json)
-      expect(parsed_value).to be_a(Eltiempo::ApiErrorDto)
-      expect(parsed_value.error).to eq @errored.error
-    end
-
     it 'should create DaysGroupWeather from location json' do
       parsed_value = @parser.daysweather_from_json(@weather_res_json)
       check_weekweather(parsed_value, @day)
+    end
+  end
+
+  context 'check_if_error_xml' do
+    it 'should return nil if the data is not an error' do
+      expect(@parser.check_if_error_xml(@weather_res_xml)).to be nil
+    end
+
+    it 'should create ApiErrorDto from api\'s error xml' do
+      parsed_value = @parser.check_if_error_xml(@error_res_xml)
+      expect(parsed_value).to be_a(Eltiempo::ApiErrorDto)
+      expect(parsed_value.error).to eq @errored.error
+    end
+  end
+
+  context 'check_if_error_json' do
+    it 'should return nil if the data is not an error' do
+      expect(@parser.check_if_error_json(@weather_res_json)).to be nil
+    end
+
+    it 'should create ApiErrorDto from api\'s error json' do
+      parsed_value = @parser.check_if_error_json(@error_res_json)
+      expect(parsed_value).to be_a(Eltiempo::ApiErrorDto)
+      expect(parsed_value.error).to eq @errored.error
     end
   end
 end

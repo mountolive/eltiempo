@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
-require 'spec_helper.rb'
+require 'eltiempo/models/day_weather'
+require 'eltiempo/models/errors/wrong_temperatures_error'
+
+require 'spec_helper'
 
 describe 'Eltiempo::DayWeather' do
   context '#new' do
