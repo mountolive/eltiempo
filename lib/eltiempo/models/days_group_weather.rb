@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
+require 'date'
 require 'eltiempo/models/errors/days_not_set_error'
+require 'eltiempo/models/errors/today_not_listed_error'
 
 module Eltiempo
 
@@ -21,21 +23,24 @@ module Eltiempo
     ##
     #  Calculates the temperature of the current day.
     #
-    #  It is assumed that the current day is the first element in the
-    #  +days+ array.
-    #
-    #  throws EmptyDaySetError if the +days+ array is not set or if it's
+    #  throws DaysNotSetError if the +days+ array is not set or if it's
     #  empty.
     def todays_temperature
       raise Eltiempo::DaysNotSetError if @days.nil? || @days.empty?
-      @days.first.average_temperature
+      today = Date.today
+      # It should be the first element in the array, but this
+      # lookup guards us from possible changes in the response
+      # order-wise
+      today_location = @days.find { |day| day.date == today }
+      raise Eltiempo::TodayNotListedError unless today_location
+      today_location.average_temperature
     end
 
     ##
     #  Calculates the average minimum temperature of the group of days,
     #  +days+.
     #
-    #  throws EmptyDaySetError if the +days+ array is not set or if it's
+    #  throws DaysNotSetError if the +days+ array is not set or if it's
     #  empty.
     def average_min_temperature
       raise Eltiempo::DaysNotSetError if @days.nil? || @days.empty?
@@ -46,7 +51,7 @@ module Eltiempo
     #  Calculates the average maximum temperature of the group of days,
     #  +days+.
     #
-    #  throws EmptyDaySetError if the +days+ array is not set or if it's
+    #  throws DaysNotSetError if the +days+ array is not set or if it's
     #  empty.
     def average_max_temperature
       raise Eltiempo::DaysNotSetError if @days.nil? || @days.empty?

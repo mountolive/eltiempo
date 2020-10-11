@@ -4,15 +4,18 @@ require 'eltiempo/models/location'
 require 'eltiempo/models/day_weather'
 require 'eltiempo/models/days_group_weather'
 require 'eltiempo/parser/api_error_dto'
+require 'eltiempo/parser/errors/missing_days_array_error'
+require 'eltiempo/parser/errors/report_not_present_error'
 require 'eltiempo/parser/response_parser'
+
 
 require 'spec_helper'
 
 describe 'Eltiempo::ResponseParser' do
   before(:all) do
     # For comparison
-    @day = Eltiempo::DayWeather.new(15, 20)
-    @location = Eltiempo::Location.new('Abrera', 1182, '')
+    @day = Eltiempo::DayWeather.new 15, 20, Date.parse('20201010')
+    @location = Eltiempo::Location.new 'Abrera', 1182, 'test'
     @errored = Eltiempo::ApiErrorDto.new 'ERROR'
  
     #Strings
@@ -22,7 +25,7 @@ describe 'Eltiempo::ResponseParser' do
          level="3" level_name="Localidad">
            <data>
              <name id="1182">Abrera</name>
-             <url>http://api.tiempo.com/index.php?api_lang=es&localidad=1182</url>
+             <url>test</url>
            </data>
         </location>
       </report>
@@ -43,7 +46,8 @@ describe 'Eltiempo::ResponseParser' do
         "day": {
                  "1": {
                        "tempmin": "15",
-                       "tempmax": "20"
+                       "tempmax": "20",
+                       "date": "20201010"
                       }
         }
       }
@@ -77,6 +81,27 @@ describe 'Eltiempo::ResponseParser' do
   end
 
   context 'locations_from_xml' do
+    it 'should raise ReportDataNotPresentError if `report` tag is missing' do
+      data = '<nothing></nothing>'
+      expect { @parser.locations_from_xml(data) }.to(
+        raise_error(Eltiempo::ReportNotPresentError)
+      )
+    end
+    it 'should return empty array when :location is nil in response' do
+      data = '<report><something></something></report>'
+      expect(@parser.locations_from_xml(data)).to be_empty
+    end
+
+    it 'should return empty array when :location is empty in response' do
+      data = '<report><location></location></report>'
+      expect(@parser.locations_from_xml(data)).to be_empty
+    end
+
+    it 'should return empty array when :location\'s length is less than 2 in response' do
+      data = '<report><location><data></data></location></report>'
+      expect(@parser.locations_from_xml(data)).to be_empty
+    end
+
     it 'should create Locations from division xml' do
       parsed_value = @parser.locations_from_xml(@division_res)
       expect(parsed_value).not_to be_a(Eltiempo::ApiErrorDto)
@@ -87,18 +112,23 @@ describe 'Eltiempo::ResponseParser' do
       expect(location.id).to eq @location.id
       expect(location.name).to eq @location.name
       expect(location.url).to eq @location.url
-      expect(location.week_weather).to be_a(Array)
-    end
-  end
-
-  context 'daysweather_from_xml' do
-    it 'should create DaysGroupWeather from location xml' do
-      parsed_value = @parser.daysweather_from_xml(@weather_res_xml)
-      check_weekweather(parsed_value, @day)
     end
   end
 
   context 'daysweather_from_json' do
+    it 'should raise Eltiempo::MissingDaysArrayError when `day` key is not present' do
+      jsondata = %q{
+        {
+          "status": 0,
+          "location": "Abrera [Provincia de Barcelona;España]",
+          "url": "https://www.tiempo.com/abrera.htm"
+        }
+      }
+      expect { @parser.daysweather_from_json(jsondata) }.to(
+        raise_error(Eltiempo::MissingDaysArrayError)
+      )
+    end
+
     it 'should create DaysGroupWeather from location json' do
       parsed_value = @parser.daysweather_from_json(@weather_res_json)
       check_weekweather(parsed_value, @day)
@@ -106,6 +136,13 @@ describe 'Eltiempo::ResponseParser' do
   end
 
   context 'check_if_error_xml' do
+    it 'should raise ReportDataNotPresentError if `report` tag is missing' do
+      data = '<nothing></nothing>'
+      expect { @parser.check_if_error_xml(data) }.to(
+        raise_error(Eltiempo::ReportNotPresentError)
+      )
+    end
+
     it 'should return nil if the data is not an error' do
       expect(@parser.check_if_error_xml(@weather_res_xml)).to be nil
     end
@@ -137,6 +174,6 @@ def check_weekweather(parsed_value, expected_day)
   expect(parsed_value.days.size).to eq 1
   day = parsed_value.days.first
   expect(day).not_to be nil
-  expect(day.min_temp).to eq expected_day.min_tmp
-  expect(day.max_tmp).to eq expected_day.max_tmp
+  expect(day.min_temp).to eq expected_day.min_temp
+  expect(day.max_temp).to eq expected_day.max_temp
 end

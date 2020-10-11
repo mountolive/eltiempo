@@ -30,7 +30,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 13.0.1"
   spec.add_development_dependency "rspec", "~> 3.9.0"
   spec.add_development_dependency "vcr", "~> 6.0.0"
-  spec.add_development_dependency "nokogiri", "~> 1.10.10"
+  spec.add_development_dependency "ox", "~> 2.13.4"
   spec.add_development_dependency "dotenv", "~> 2.7.0"
   spec.add_development_dependency "simplecov", "~> 0.19.0"
   spec.add_development_dependency "webmock", "~> 3.9.1"
