@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
 require 'eltiempo/models/location'
 require 'eltiempo/models/day_weather'
 require 'eltiempo/models/days_group_weather'
 require 'eltiempo/parser/api_error_dto'
 require 'eltiempo/parser/response_parser'
+
+require 'spec_helper'
 
 describe 'Eltiempo::ResponseParser' do
   before(:all) do

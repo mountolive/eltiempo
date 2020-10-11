@@ -8,7 +8,9 @@ require 'spec_helper'
 describe 'Eltiempo::DayWeather' do
   context '#new' do
     it 'should throw error when min_temp is greater than max_temp' do
-      expect(Eltiempo::DayWeather.new(20, 19)).to raise_error(Eltiempo::WrongTemperaturesError)
+      expect { Eltiempo::DayWeather.new(20, 19) }.to(
+        raise_error(Eltiempo::WrongTemperaturesError)
+      )
     end
 
     it 'should instantiate DayWeather correctly' do
