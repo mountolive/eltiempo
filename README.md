@@ -51,9 +51,10 @@ puts week_weather.average_minimum_temperature
 
 The `eltiempo` CLI is an example of the use of the `gem`. In any case, as mentioned, you need to have the `TIEMPO_API_KEY` env variable set in your system.
 
-The help function for the `eltiempo` cli prompts the following:
+The help function for the `eltiempo` CLI prompts the following:
 
 ```
+$ eltiempo --help
 
      The "eltiempo" cli retrieves the temperature of any city in Barcelona.
      It can prompt today's temperature, average minimum and/or average maximum
@@ -72,7 +73,7 @@ The help function for the `eltiempo` cli prompts the following:
 ### CLI Usage
 
 ```
-$ TIEMPO_API_KEY=zdo2c683olan ./eltiempo -d Gavà
+$ TIEMPO_API_KEY=yourkey eltiempo -d Gavà
 
 Barcelona: Min temperature in Gavà for the week: 
               9.8 celsius
@@ -81,12 +82,12 @@ Barcelona: Min temperature in Gavà for the week:
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests (this includes coverage report in `coverage` directory). 
+After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests (this will create a coverage report in the `coverage` directory). 
 You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
-On local development, as already mentioned, you can use [dotenv](https://github.com/bkeepers/dotenv) to define the `TIEMPO_API_KEY` env variable, and it will be loaded on `require`
+On local development, as already mentioned, you can use [dotenv](https://github.com/bkeepers/dotenv) to define the `TIEMPO_API_KEY` env variable, and it will be loaded on `require`. In that sense, the file `.env.template` serves as guideline: You can just rename it to `.env` and set the variable inside it to your API key and that's all.
 
 ## Contributing
 
