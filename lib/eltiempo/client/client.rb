@@ -57,8 +57,8 @@ module Eltiempo
     end
 
     ##
-    # Gets a Division by its +division_id+ in the system,
-    # pulling its associated Location
+    # Gets a Division's locations by its +division_id+ in the system,
+    # pulling them from the api
     #
     # raises MissingApiKeyError if the api_key is not set
     # raises NegativeIdError if the +division_id+ is negative number
@@ -66,7 +66,9 @@ module Eltiempo
     # raises StandardApiError if the +parser+ encounters an ApiErrorDto
     # raises WrongContentType if the response has a not supported content type
     # raises ResponseNotOkError if the response's code is not 200
-    def get_division(division_id)
+    #
+    # returns an array of locations
+    def get_locations_from_division_id(division_id)
       basic_checks(division_id)
       response = HTTP.get("#{@api_url}&division=#{division_id}")
       validate_if_api_error(response)
@@ -83,9 +85,10 @@ module Eltiempo
     # raises StandardApiError if the +parser+ encounters an ApiErrorDto
     # raises WrongContentType if the response has a not supported content type
     # raises ResponseNotOkError if the response's code is not 200
-    def get_location_weather(location_id)
+    def get_weather_from_location_id(location_id)
       basic_checks(location_id)
       # version 3.0 of the endpoint returns a json object
+      # which is easier to parse
       response = HTTP.get("#{@api_url}&localidad=#{location_id}&v=3.0")
       validate_if_api_error(response)
       @parser.daysweather_from_json(response.body.to_s)
@@ -126,7 +129,7 @@ module Eltiempo
         case mime_type
         when 'text/javascript', 'application/json'
           @parser.check_if_error_json body
-        # XML
+        # XML (as the inclusion is already checked by the include? on L125)
         else
           @parser.check_if_error_xml body
         end

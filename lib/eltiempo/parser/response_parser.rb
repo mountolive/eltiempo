@@ -60,6 +60,10 @@ module Eltiempo
       if raw_locations.nil? || raw_locations.empty? || raw_locations.length < 2
         return []
       end
+
+      # The reason to return a slice instead of a map directly
+      # is to decoupling Division/Client/ResponseParser
+
       # We filter out instead of simple slicing
       # to guard ourselves of changes on te document's order
       raw_locations.filter { |elem| !!elem[:data] }.map do |data|

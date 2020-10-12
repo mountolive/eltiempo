@@ -26,13 +26,14 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  spec.add_dependency "ox", "~> 2.13.4"
+  spec.add_dependency "http", "~> 4.4.1"
+  spec.add_dependency "thor", "~> 1.0.1"
+  spec.add_development_dependency "dotenv", "~> 2.7.0"
   spec.add_development_dependency "bundler", "~> 2.1.2"
   spec.add_development_dependency "rake", "~> 13.0.1"
   spec.add_development_dependency "rspec", "~> 3.9.0"
   spec.add_development_dependency "vcr", "~> 6.0.0"
-  spec.add_development_dependency "ox", "~> 2.13.4"
-  spec.add_development_dependency "dotenv", "~> 2.7.0"
   spec.add_development_dependency "simplecov", "~> 0.19.0"
   spec.add_development_dependency "webmock", "~> 3.9.1"
-  spec.add_development_dependency "http", "~> 4.4.1"
 end

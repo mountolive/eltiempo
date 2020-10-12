@@ -2,6 +2,9 @@ PATH
   remote: .
   specs:
     eltiempo (0.1.0)
+      http (~> 4.4.1)
+      ox (~> 2.13.4)
+      thor (~> 1.0.1)
 
 GEM
   remote: https://rubygems.org/
@@ -49,6 +52,7 @@ GEM
       docile (~> 1.1)
       simplecov-html (~> 0.11)
     simplecov-html (0.12.3)
+    thor (1.0.1)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.7)
@@ -65,8 +69,6 @@ DEPENDENCIES
   bundler (~> 2.1.2)
   dotenv (~> 2.7.0)
   eltiempo!
-  http (~> 4.4.1)
-  ox (~> 2.13.4)
   rake (~> 13.0.1)
   rspec (~> 3.9.0)
   simplecov (~> 0.19.0)
