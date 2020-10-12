@@ -29,9 +29,10 @@ module Eltiempo
   ##
   #  Client class for connecting to `eltiempo` API and retrieving
   #  weather data from it.
+  #
+  #  Uses https://github.com/httprb/http as an HTTP client
   class Client
     @@api_key = ENV['TIEMPO_API_KEY']
-    @@api_url = "#{Eltiempo::base_url}?affiliate_id=#{@@api_key}"
     @@mime_types = %w{text/xml text/javascript application/json}
 
     ##
@@ -42,10 +43,17 @@ module Eltiempo
     end
 
     ##
+    #  Default getter of the api_key value used for the calls
+    def self.api_key
+      @@api_key
+    end
+
+    ##
     #  Creates the Client's instance that will pull data from
     #  the eltiempo's api, and convert it using the +parser+
     def initialize(parser)
       @parser = parser
+      @api_url = "#{Eltiempo::base_url}?affiliate_id=#{Eltiempo::Client.api_key}"
     end
 
     ##
@@ -60,7 +68,7 @@ module Eltiempo
     # raises ResponseNotOkError if the response's code is not 200
     def get_division(division_id)
       basic_checks(division_id)
-      response = HTTP.get("#{@@api_url}&division=#{division_id}")
+      response = HTTP.get("#{@api_url}&division=#{division_id}")
       validate_if_api_error(response)
       @parser.locations_from_xml(response.body)
     end
@@ -78,7 +86,7 @@ module Eltiempo
     def get_location_weather(location_id)
       basic_checks(location_id)
       # version 3.0 of the endpoint returns a json object
-      response = HTTP.get("#{@@api_url}&localidad=#{location_id}&v=3.0")
+      response = HTTP.get("#{@api_url}&localidad=#{location_id}&v=3.0")
       validate_if_api_error(response)
       @parser.daysweather_from_json(response.body)
     end
