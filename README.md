@@ -4,6 +4,10 @@ The `eltiempo` wraps a client and a corresponding parser for retrieving weather 
 
 An example CLI is also provided. This can retrieve today's temperature, and current week's maximum and minimum average temperature.
 
+## Requirements
+
+`ruby 2.7.0`
+
 ## Installation
 
 Add this line to your application's Gemfile:
