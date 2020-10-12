@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'eltiempo/cli/barcelona_cli'
+
+BarcelonaCLI.start(ARGV)

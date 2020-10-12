@@ -3,6 +3,7 @@
 require 'eltiempo/models/location'
 require 'eltiempo/models/day_weather'
 require 'eltiempo/models/days_group_weather'
+require 'eltiempo/models/division'
 require 'eltiempo/parser/api_error_dto'
 require 'eltiempo/parser/errors/missing_days_array_error'
 require 'eltiempo/parser/errors/report_not_present_error'
@@ -17,6 +18,8 @@ describe Eltiempo::ResponseParser do
     @day = Eltiempo::DayWeather.new 15, 20, Date.parse('20201010')
     @location = Eltiempo::Location.new 'Abrera', 1182, 'test'
     @errored = Eltiempo::ApiErrorDto.new 'ERROR'
+    @division = Eltiempo::Division.new 'Barcelona', 102
+    @division.add_location(@location)
  
     #Strings
     @division_res = %q{
@@ -80,34 +83,34 @@ describe Eltiempo::ResponseParser do
     @parser = Eltiempo::ResponseParser.new
   end
 
-  context 'locations_from_xml' do
+  context 'division_with_locations_from_xml' do
     it 'should raise ReportDataNotPresentError if `report` tag is missing' do
       data = '<nothing></nothing>'
-      expect { @parser.locations_from_xml(data) }.to(
+      expect { 
+        @parser.division_with_locations_from_xml(data, @division.name, @division.id) 
+      }.to(
         raise_error(Eltiempo::ReportNotPresentError)
       )
     end
-    it 'should return empty array when :location is nil in response' do
+    it 'should return division with no locations when :location is nil in response' do
       data = '<report><something></something></report>'
-      expect(@parser.locations_from_xml(data)).to be_empty
+      exec = @parser.division_with_locations_from_xml(data, @division.name, @division.id)
+      expect(exec.id).to eq @division.id
+      expect(exec.name).to eq @division.name
+      expect(exec.locations).to be_empty
     end
 
-    it 'should return empty array when :location is empty in response' do
-      data = '<report><location></location></report>'
-      expect(@parser.locations_from_xml(data)).to be_empty
-    end
-
-    it 'should return empty array when :location\'s length is less than 2 in response' do
-      data = '<report><location><data></data></location></report>'
-      expect(@parser.locations_from_xml(data)).to be_empty
-    end
-
-    it 'should create Locations from division xml' do
-      parsed_value = @parser.locations_from_xml(@division_res)
+    it 'should create Division from division xml' do
+      parsed_value = @parser.division_with_locations_from_xml(
+        @division_res, 
+        @division.name,
+        @division.id
+      )
       expect(parsed_value).not_to be_a(Eltiempo::ApiErrorDto)
-      expect(parsed_value).to be_a(Array)
-      expect(parsed_value.size).to eq 1
-      location = parsed_value.first
+      expect(parsed_value).to be_a(Eltiempo::Division)
+      expect(parsed_value.locations.size).to eq 1
+      # Getting the only element in the hash
+      location = parsed_value.locations.first.last
       expect(location).not_to be nil
       expect(location.id).to eq @location.id
       expect(location.name).to eq @location.name

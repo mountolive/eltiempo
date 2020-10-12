@@ -46,29 +46,34 @@ module Eltiempo
     end
 
     ##
-    #  Parses a Location's XML response, +xmldata+ to an array of Location
+    #  Parses a Location's XML response, +xmldata+,
+    #  creating a Division with the retrieved Locations,
+    #  the Division will have +div_name+ name and +div_id+ id
     #
     #  throws ReportNotPresentError if the root tag of the object
     #  (`report`) is missing
-    def locations_from_xml(xmldata)
+    #  throws InvalidNameTagError if any `name` tag is invalid in the response
+    #
+    #  returns a complete (Locations included) Division instance
+    def division_with_locations_from_xml(xmldata, div_name, div_id)
       #  Note: as for the api, Location's rpc only supports XML format
       #  in its responses
       report = get_report(xmldata)
       raw_locations = report[:location]
-      # Missing the location tag. First element in array is
-      # current division's info
-      if raw_locations.nil? || raw_locations.empty? || raw_locations.length < 2
-        return []
+      division = Eltiempo::Division.new div_name, div_id
+      # Missing the location tag.
+      return division if raw_locations.nil?
+      raw_locations.each do |data|
+        if data[:data]
+          content = data[:data]
+          name = content[:name]
+          valid_name = name.is_a?(Array) && name.length > 1
+          # Skipping those with incomplete name data
+          # (given the structure of the response once pre parsed)
+          division.add_location(hash_to_location(data)) if valid_name
+        end
       end
-
-      # The reason to return a slice instead of a map directly
-      # is to decoupling Division/Client/ResponseParser
-
-      # We filter out instead of simple slicing
-      # to guard ourselves of changes on te document's order
-      raw_locations.filter { |elem| !!elem[:data] }.map do |data|
-        hash_to_location(data)
-      end
+      division
     end
 
     ##

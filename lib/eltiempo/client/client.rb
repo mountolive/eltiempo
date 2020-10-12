@@ -58,7 +58,8 @@ module Eltiempo
 
     ##
     # Gets a Division's locations by its +division_id+ in the system,
-    # pulling them from the api
+    # pulling them from the api. An optional +division_name+ can be passed
+    # to assign to the returned Division
     #
     # raises MissingApiKeyError if the api_key is not set
     # raises NegativeIdError if the +division_id+ is negative number
@@ -68,11 +69,15 @@ module Eltiempo
     # raises ResponseNotOkError if the response's code is not 200
     #
     # returns an array of locations
-    def get_locations_from_division_id(division_id)
+    def get_locations_from_division_id(division_id, division_name = '')
       basic_checks(division_id)
       response = HTTP.get("#{@api_url}&division=#{division_id}")
       validate_if_api_error(response)
-      @parser.locations_from_xml(response.body.to_s)
+      @parser.division_with_locations_from_xml(
+        response.body.to_s,
+        division_name,
+        division_id,
+      )
     end
 
     ##

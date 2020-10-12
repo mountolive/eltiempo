@@ -10,23 +10,28 @@ module Eltiempo
 
     ##
     #  Creates a Division instance with passed +name+ and +id+ associated
-    #
-    #  +locations+ if nil by default. It should be a hash { name => Location }
-    #  if passed, it will transform all keys to lower case
-    def initialize(name, id, locations = nil)
+    def initialize(name, id)
       @name = name
       @id = id
-      set_locations(locations) if locations
+      @locations = {}
     end
 
     ##
-    #  Checks wether the +locations+ hash is set in this Division
-    #  instance.
+    #  Checks whether the +locations+ hash in this Division
+    #  instance is empty or not.
     #
-    #  Returns false either when there's no +locations+ set or
-    #  if the hash is empty.
+    #  Returns false if the +locations+ hash is empty.
     def has_locations?
-      !!@locations && !@locations.empty?
+      !@locations.empty?
+    end
+
+    ##
+    #  Adds single Location to Division's locations register.
+    #  It overrides any previous value, if already registered.
+    #  The key in the hash would be the Location's name, downcased.
+    #  Use `get_location` to case-insensitive retrieval
+    def add_location(location)
+      @locations[location.name.downcase] = location
     end
 
     ##
@@ -39,19 +44,15 @@ module Eltiempo
     #      location = { 'test' => Location }
     #      division.get_location('tEsT') will return `location`
     def get_location(name)
-      return nil unless has_locations?
       @locations[name.downcase]
     end
 
-    ## Alias method for setting locations
+    ##
+    #  Alias method for setting locations
+    #  +locations+ should be a hash { location.name => Location }
+    #  when added, every key will be downcased
     def locations=(locations)
-      set_locations(locations)
+      locations.each { |k, v| @locations[k.downcase] = v }
     end
-
-    private
-      def set_locations(locations)
-        @locations = {}
-        locations.each { |k, v| @locations[k.downcase] = v }
-      end
   end
 end
