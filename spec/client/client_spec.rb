@@ -7,13 +7,14 @@ require 'eltiempo/client/errors/non_numeric_id_error'
 require 'eltiempo/client/errors/response_not_ok_error'
 require 'eltiempo/client/errors/standard_api_error'
 require 'eltiempo/client/errors/wrong_content_type_error'
+require 'eltiempo/parser/response_parser'
 require 'http'
 
 require 'spec_helper'
 
-describe 'Eltiempo::Client' do
+describe Eltiempo::Client do
   before(:all) do
-    @client = Eltiempo::Client.new
+    @client = Eltiempo::Client.new Eltiempo::ResponseParser.new
     @non_existing = 9999999999
     @wrong_key = 'wrong-key'
     @non_numeric = 'wrong'

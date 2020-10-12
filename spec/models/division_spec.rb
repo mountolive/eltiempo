@@ -5,7 +5,7 @@ require 'eltiempo/models/location'
 
 require 'spec_helper'
 
-describe 'Eltiempo::Division' do
+describe Eltiempo::Division do
   before(:each) do
     @division = Eltiempo::Division.new 'Barcelona', 102
   end

@@ -8,7 +8,7 @@ require 'eltiempo/models/errors/today_not_listed_error'
 
 require 'spec_helper'
 
-describe 'Eltiempo::DaysGroupWeather' do
+describe Eltiempo::DaysGroupWeather do
   before(:all) do
     @days = [
       Eltiempo::DayWeather.new(10, 19, Date.today),

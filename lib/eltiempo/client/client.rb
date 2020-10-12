@@ -43,9 +43,9 @@ module Eltiempo
 
     ##
     #  Creates the Client's instance that will pull data from
-    #  the eltiempo's api
-    def initialize
-      @parser = Eltiempo::ResponseParser.new
+    #  the eltiempo's api, and convert it using the +parser+
+    def initialize(parser)
+      @parser = parser
     end
 
     ##

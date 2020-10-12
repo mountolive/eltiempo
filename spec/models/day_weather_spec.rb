@@ -6,7 +6,7 @@ require 'eltiempo/models/errors/wrong_temperatures_error'
 
 require 'spec_helper'
 
-describe 'Eltiempo::DayWeather' do
+describe Eltiempo::DayWeather do
   context '#new' do
     it 'should throw error when min_temp is greater than max_temp' do
       expect { Eltiempo::DayWeather.new(20, 19, Date.today) }.to(

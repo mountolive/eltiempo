@@ -11,7 +11,7 @@ require 'eltiempo/parser/response_parser'
 
 require 'spec_helper'
 
-describe 'Eltiempo::ResponseParser' do
+describe Eltiempo::ResponseParser do
   before(:all) do
     # For comparison
     @day = Eltiempo::DayWeather.new 15, 20, Date.parse('20201010')
