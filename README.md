@@ -6,12 +6,6 @@ An example CLI is also provided. This can retrieve today's temperature, and curr
 
 ## Installation
 
-It's neccessary a proper `eltiempo`'s API key to be able to retrieve data.
-Both the CLI and the `gem` expect a `TIEMPO_API_KEY` environment variable.
-
-If you're using [dotenv](https://github.com/bkeepers/dotenv) in your project,
-the gem will be able to pick up the variable from there also.
-
 Add this line to your application's Gemfile:
 
 ```ruby
@@ -25,6 +19,13 @@ And then execute:
 Or install it yourself as:
 
     $ gem install eltiempo
+
+It's neccessary a proper `eltiempo`'s API key to be able to retrieve data.
+Both the CLI and the `gem` expect a `TIEMPO_API_KEY` environment variable to be set.
+
+If you're using [dotenv](https://github.com/bkeepers/dotenv) in your project,
+the gem will be able to pick up the variable from there also.
+
 
 ## Gem usage
 
