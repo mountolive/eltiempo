@@ -15,10 +15,10 @@ module Eltiempo
   class ResponseParser
 
     ##
-    #  Checks whether the received xml response, as +xmldata+,
+    #  Checks whether the received xml object, as +xmldata+,
     #  from the api is an error object.
     #
-    #  throws ReportNotPresentError if the root tag of the response
+    #  throws ReportNotPresentError if the root tag of the object
     #  (`report`) is missing
     #
     #  Returns nil if it's not an error object
@@ -30,7 +30,7 @@ module Eltiempo
     end
 
     ##
-    #  Checks whether the received json response, as +jsondata+,
+    #  Checks whether the received json object, as +jsondata+,
     #  from the api is an error objecti.
     #
     #  Returns nil if it's not an error object
@@ -46,7 +46,7 @@ module Eltiempo
     ##
     #  Parses a Location's XML response, +xmldata+ to an array of Location
     #
-    #  throws ReportNotPresentError if the root tag of the response
+    #  throws ReportNotPresentError if the root tag of the object
     #  (`report`) is missing
     def locations_from_xml(xmldata)
       #  Note: as for the api, Location's rpc only supports XML format
@@ -68,6 +68,9 @@ module Eltiempo
     ##
     #  Parses a DayWeather's JSON response, 
     #  +jsondata+ to a DaysGroupWeather instance
+    #
+    #  raises MissingDaysArrayError if the `day` parameter is not
+    #  present in the object
     def daysweather_from_json(jsondata)
       # The json response is more parsing-friendly than the xml one
       json_hash = JSON.parse(jsondata)

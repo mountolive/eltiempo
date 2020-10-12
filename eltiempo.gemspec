@@ -34,4 +34,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "dotenv", "~> 2.7.0"
   spec.add_development_dependency "simplecov", "~> 0.19.0"
   spec.add_development_dependency "webmock", "~> 3.9.1"
+  spec.add_development_dependency "http", "~> 4.4.1"
 end

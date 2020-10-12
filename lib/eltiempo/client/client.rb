@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
+require 'eltiempo/client/errors/missing_api_key_error'
+require 'eltiempo/client/errors/negative_id_error'
+require 'eltiempo/client/errors/non_numeric_id_error'
+require 'eltiempo/client/errors/response_not_ok_error'
+require 'eltiempo/client/errors/standard_api_error'
+require 'eltiempo/client/errors/wrong_content_type_error'
 require 'eltiempo/parser/response_parser'
+require 'http'
 
 module Eltiempo
   @@base_url = 'https://api.tiempo.com/index.php'
@@ -25,6 +32,7 @@ module Eltiempo
   class Client
     @@api_key = ENV['TIEMPO_API_KEY']
     @@api_url = "#{Eltiempo::base_url}?affiliate_id=#{@@api_key}"
+    @@mime_types = %w{text/xml text/javascript application/json}
 
     ##
     #  Checks whether the `TIEMPO_API_KEY` env variable is set
@@ -33,17 +41,94 @@ module Eltiempo
       !!@@api_key
     end
 
+    ##
+    #  Creates the Client's instance that will pull data from
+    #  the eltiempo's api
     def initialize
       @parser = Eltiempo::ResponseParser.new
     end
 
+    ##
+    # Gets a Division by its +division_id+ in the system,
+    # pulling its associated Location
+    #
+    # raises MissingApiKeyError if the api_key is not set
+    # raises NegativeIdError if the +division_id+ is negative number
+    # raises NonNumericIdError if +division_id+ is not an integer
+    # raises StandardApiError if the +parser+ encounters an ApiErrorDto
+    # raises WrongContentType if the response has a not supported content type
+    # raises ResponseNotOkError if the response's code is not 200
     def get_division(division_id)
-      # TODO It's going to return the basic Division
+      basic_checks(division_id)
+      response = HTTP.get("#{@@api_url}&division=#{division_id}")
+      validate_if_api_error(response)
+      @parser.locations_from_xml(response.body)
     end
 
+    ##
+    # Gets a Location's weather, as a DaysGroupWeather,
+    # by its +location_id+ in the system. 
+    #
+    # raises MissingApiKeyError if the api_key is not set
+    # raises NegativeIdError if the +division_id+ is negative number
+    # raises NonNumericIdError if +division_id+ is not an integer
+    # raises StandardApiError if the +parser+ encounters an ApiErrorDto
+    # raises WrongContentType if the response has a not supported content type
+    # raises ResponseNotOkError if the response's code is not 200
     def get_location_weather(location_id)
-      # TODO Will return a WeekWeather instance
+      basic_checks(location_id)
+      # version 3.0 of the endpoint returns a json object
+      response = HTTP.get("#{@@api_url}&localidad=#{location_id}&v=3.0")
+      validate_if_api_error(response)
+      @parser.daysweather_from_json(response.body)
     end
+
+    private
+
+      ##
+      #  Checks if the requirements for a proper request
+      #  to the api, using the +id+, are met.
+      #
+      # raises MissingApiKeyError if the api_key is not set
+      # raises NegativeIdError if the +id+ is negative number
+      # raises NonNumericIdError if +id+ is not an integer
+      def basic_checks(id)
+        raise Eltiempo::MissingApiKeyError unless Eltiempo::Client.api_key?
+        raise Eltiempo::NonNumericIdError unless id.is_a? Numeric
+        raise Eltiempo::NegativeIdError unless id >= 0
+      end
+
+      ##
+      #  Checks if the obtained response is valid in terms
+      #  of code, content_type and message's data
+      #
+      # raises WrongContentType if the response has a not supported content type
+      # raises ResponseNotOkError if the response's code is not 200
+      #
+      # returns an ApiErrorDto when the response is invalid,
+      # otherwise returns nil
+      def validate_response(response)
+        raise Eltiempo::ResponseNotOkError unless response.code == 200
+        content_type = response.content_type
+        raise Eltiempo::WrongContentTypeError unless @@mime_types.include? content_type
+        case content_type
+        when 'text/javascript', 'application/json'
+          @parser.check_if_error_json(response.body)
+        # XML
+        else
+          @parser.check_if_error_xml(response.body)
+        end
+      end
+
+      ##
+      #  Checks if the obtained response is valid in terms of the basic structure
+      #  of the xml/json object obtained
+      #
+      # raises StandardApiError if the +parser+ encounters an ApiErrorDto
+      def validate_if_api_error(response)
+        errored = validate_response(response)
+        raise Eltiempo::StandardApiError(errored.error) if errored.is_a? ApiErrorDto
+      end
   end
 end
 

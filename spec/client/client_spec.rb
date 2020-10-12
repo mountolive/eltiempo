@@ -4,7 +4,10 @@ require 'eltiempo/client/client'
 require 'eltiempo/client/errors/missing_api_key_error'
 require 'eltiempo/client/errors/negative_id_error'
 require 'eltiempo/client/errors/non_numeric_id_error'
+require 'eltiempo/client/errors/response_not_ok_error'
 require 'eltiempo/client/errors/standard_api_error'
+require 'eltiempo/client/errors/wrong_content_type_error'
+require 'http'
 
 require 'spec_helper'
 
@@ -20,6 +23,20 @@ describe 'Eltiempo::Client' do
   end
 
   context 'get_division' do
+    it 'should raise WrongContentTypeError when response is invalid type' do
+      allow(HTTP::ContentType).to receive(:mime_type).and_return('bad')
+      expect { @client.get_division(@division_id) }.to(
+        raise_error(Eltiempo::WrongContentTypeError)
+      )
+    end
+
+    it 'should raise ResponseNotOkError when response\'s code is not 200' do
+      allow(HTTP::Response).to receive(:code).and_return(400)
+      expect { @client.get_division(@division_id) }.to(
+        raise_error(Eltiempo::ResponseNotOkError)
+      )
+    end
+
     it 'should error if api_key is not set' do
       allow(Eltiempo::Client).to receive(:api_key?).and_return(false)   
       expect { @client.get_division(@division_id) }.to(
@@ -67,6 +84,20 @@ describe 'Eltiempo::Client' do
   end
 
   context 'get_location_weather' do
+    it 'should raise WrongContentTypeError when response is invalid type' do
+      allow(HTTP::ContentType).to receive(:mime_type).and_return('bad')
+      expect { @client.get_location_weather(@location_id) }.to(
+        raise_error(Eltiempo::WrongContentTypeError)
+      )
+    end
+
+    it 'should raise ResponseNotOkError when response\'s code is not 200' do
+      allow(HTTP::Response).to receive(:code).and_return(400)
+      expect { @client.get_location_weather(@location_id) }.to(
+        raise_error(Eltiempo::ResponseNotOkError)
+      )
+    end
+
     it 'should error if api_key is not set' do
       allow(Eltiempo::Client).to receive(:api_key?).and_return(false)   
       expect { @client.get_location_weather(@location_id) }.to(
