@@ -24,7 +24,7 @@ class MockParser
   ## Returns nil
   def check_if_error_xml(xmldata); end
 
-  ## Returns default location 
+  ## Returns default Location
   def division_with_locations_from_xml(xmldata, div_name, div_id)
     @division
   end

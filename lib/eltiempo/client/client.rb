@@ -59,7 +59,7 @@ module Eltiempo
     ##
     # Gets a Division's locations by its +division_id+ in the system,
     # pulling them from the api. An optional +division_name+ can be passed
-    # to assign to the returned Division
+    # to assign it to the returned Division
     #
     # raises MissingApiKeyError if the api_key is not set
     # raises NegativeIdError if the +division_id+ is negative number

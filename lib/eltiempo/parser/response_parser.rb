@@ -18,7 +18,7 @@ module Eltiempo
 
     ##
     #  Checks whether the received xml object, as +xmldata+,
-    #  from the api is an error object.
+    #  from the api is an error object or not.
     #
     #  throws ReportNotPresentError if the root tag of the object
     #  (`report`) is missing
@@ -33,7 +33,7 @@ module Eltiempo
 
     ##
     #  Checks whether the received json object, as +jsondata+,
-    #  from the api is an error objecti.
+    #  from the api is an error object or not.
     #
     #  Returns nil if it's not an error object
     def check_if_error_json(jsondata)
@@ -52,7 +52,6 @@ module Eltiempo
     #
     #  throws ReportNotPresentError if the root tag of the object
     #  (`report`) is missing
-    #  throws InvalidNameTagError if any `name` tag is invalid in the response
     #
     #  returns a complete (Locations included) Division instance
     def division_with_locations_from_xml(xmldata, div_name, div_id)

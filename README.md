@@ -71,7 +71,7 @@ $ eltiempo --help
      weekly temperature, in Celsius degrees.
  
      FLAGS
-     --today, -t    Will prompt today's temperature for the passed city.
+     --today, -t   Will prompt today's temperature for the passed city.
      --av-max, -u  Will prompt average maximum temperature of the week for that city.
      --av-min, -d  Will prompt average minimum temperature of the week for that city.
 
