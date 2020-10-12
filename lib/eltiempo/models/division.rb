@@ -6,7 +6,7 @@ module Eltiempo
   #  Data object that holds information about a given division
   #  from the api (i.e. 'Barcelona').
   class Division
-    attr_reader :locations
+    attr_reader :id, :name, :locations
 
     ##
     #  Creates a Division instance with passed +name+ and +id+ associated

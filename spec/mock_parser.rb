@@ -22,10 +22,10 @@ class MockParser
   end
 
   ## Returns nil
-  def check_if_error_json; end
+  def check_if_error_json(jsondata); end
 
   ## Returns nil
-  def check_if_error_xml; end
+  def check_if_error_xml(xmldata); end
 
   ## Returns default location 
   def locations_from_xml(division_id)

@@ -2,6 +2,8 @@
 
 require 'json'
 require 'ox'
+require 'eltiempo/models/day_weather'
+require 'eltiempo/models/days_group_weather'
 require 'eltiempo/models/location'
 require 'eltiempo/parser/api_error_dto'
 require 'eltiempo/parser/errors/missing_days_array_error'

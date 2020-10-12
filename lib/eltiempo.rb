@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
-require "eltiempo/version"
+require 'dotenv'
 
-# TODO Implement
+# Loading environment variables
+Dotenv.load
+
+require 'eltiempo/version'
+require 'eltiempo/client/client'
+require 'eltiempo/parser/response_parser'
 

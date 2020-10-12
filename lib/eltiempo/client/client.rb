@@ -70,7 +70,7 @@ module Eltiempo
       basic_checks(division_id)
       response = HTTP.get("#{@api_url}&division=#{division_id}")
       validate_if_api_error(response)
-      @parser.locations_from_xml(response.body)
+      @parser.locations_from_xml(response.body.to_s)
     end
 
     ##
@@ -88,7 +88,7 @@ module Eltiempo
       # version 3.0 of the endpoint returns a json object
       response = HTTP.get("#{@api_url}&localidad=#{location_id}&v=3.0")
       validate_if_api_error(response)
-      @parser.daysweather_from_json(response.body)
+      @parser.daysweather_from_json(response.body.to_s)
     end
 
     private
@@ -118,13 +118,17 @@ module Eltiempo
       def validate_response(response)
         raise Eltiempo::ResponseNotOkError unless response.code == 200
         content_type = response.content_type
-        raise Eltiempo::WrongContentTypeError unless @@mime_types.include? content_type
-        case content_type
+        mime_type = content_type.mime_type if content_type
+        unless mime_type && @@mime_types.include?(mime_type)
+          raise Eltiempo::WrongContentTypeError
+        end
+        body = response.body.to_s
+        case mime_type
         when 'text/javascript', 'application/json'
-          @parser.check_if_error_json(response.body)
+          @parser.check_if_error_json body
         # XML
         else
-          @parser.check_if_error_xml(response.body)
+          @parser.check_if_error_xml body
         end
       end
 
@@ -135,7 +139,7 @@ module Eltiempo
       # raises StandardApiError if the +parser+ encounters an ApiErrorDto
       def validate_if_api_error(response)
         errored = validate_response(response)
-        raise Eltiempo::StandardApiError(errored.error) if errored.is_a? ApiErrorDto
+        raise Eltiempo::StandardApiError.new(errored.error) if errored.is_a? ApiErrorDto
       end
   end
 end

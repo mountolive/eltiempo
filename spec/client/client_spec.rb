@@ -28,7 +28,7 @@ describe Eltiempo::Client do
 
   context 'get_division' do
     it 'should raise WrongContentTypeError when response is invalid type' do
-      allow(HTTP::ContentType).to receive(:mime_type).and_return('bad')
+      allow_any_instance_of(HTTP::ContentType).to receive(:mime_type).and_return('bad')
       VCR.use_cassette('bad-mime-type-division') do
         expect { @client.get_division(@division_id) }.to(
           raise_error(Eltiempo::WrongContentTypeError)
@@ -37,7 +37,7 @@ describe Eltiempo::Client do
     end
 
     it 'should raise ResponseNotOkError when response\'s code is not 200' do
-      allow(HTTP::Response).to receive(:code).and_return(400)
+      allow_any_instance_of(HTTP::Response).to receive(:code).and_return(400)
       VCR.use_cassette('bad-response-division') do
         expect { @client.get_division(@division_id) }.to(
           raise_error(Eltiempo::ResponseNotOkError)
@@ -84,7 +84,7 @@ describe Eltiempo::Client do
 
   context 'get_location_weather' do
     it 'should raise WrongContentTypeError when response is invalid type' do
-      allow(HTTP::ContentType).to receive(:mime_type).and_return('bad')
+      allow_any_instance_of(HTTP::ContentType).to receive(:mime_type).and_return('bad')
       VCR.use_cassette('bad-mime-type-location') do
         expect { @client.get_location_weather(@location_id) }.to(
           raise_error(Eltiempo::WrongContentTypeError)
@@ -93,7 +93,7 @@ describe Eltiempo::Client do
     end
 
     it 'should raise ResponseNotOkError when response\'s code is not 200' do
-      allow(HTTP::Response).to receive(:code).and_return(400)
+      allow_any_instance_of(HTTP::Response).to receive(:code).and_return(400)
       VCR.use_cassette('bad-response-location') do
         expect { @client.get_location_weather(@location_id) }.to(
           raise_error(Eltiempo::ResponseNotOkError)
@@ -152,10 +152,11 @@ describe Eltiempo::Client do
       end
     end
 
-    it 'should error if api_key is invalid, [integration]' do
+    it 'should error if api_key is invalid, get_location_weather, [integration]' do
       allow(Eltiempo::Client).to receive(:api_key).and_return(@wrong_key)
+      local_client = Eltiempo::Client.new Eltiempo::ResponseParser.new
       VCR.use_cassette('wrong-api-key') do
-        expect { @integration_client.get_location_weather(@location_id) }.to(
+        expect { local_client.get_location_weather(@location_id) }.to(
           raise_error(Eltiempo::StandardApiError)
         )
       end
@@ -169,10 +170,11 @@ describe Eltiempo::Client do
       end
     end
 
-    it 'should error if api_key is invalid, [integration]' do
+    it 'should error if api_key is invalid, get_division, [integration]' do
       allow(Eltiempo::Client).to receive(:api_key).and_return(@wrong_key)
+      local_client = Eltiempo::Client.new Eltiempo::ResponseParser.new
       VCR.use_cassette('wrong-api-key') do
-        expect { @integration_client.get_division(@division_id) }.to(
+        expect { local_client.get_division(@division_id) }.to(
           raise_error(Eltiempo::StandardApiError)
         )
       end
