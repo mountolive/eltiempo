@@ -49,21 +49,26 @@ puts week_weather.average_minimum_temperature
 
 ## CLI
 
-The `eltiempo` CLI is an example of the use of the `gem`. In any case, as mentioned, you need to have the `TIEMPO_API_KEY` env variable set in your system.
+### CLI Installation
+
+To install the cli in your system, after cloning this repository, run `bundle exec rake install`
+
+### CLI Help
 
 The help function for the `eltiempo` CLI prompts the following:
 
 ```
 $ eltiempo --help
 
+
      The "eltiempo" cli retrieves the temperature of any city in Barcelona.
      It can prompt today's temperature, average minimum and/or average maximum
      weekly temperature, in Celsius degrees.
-
+ 
      FLAGS
-     --today, -today, -t    Will prompt today's temperature for the passed city.
-     --av-max, -av_max, -u  Will prompt average maximum temperature of the week for that city.
-     --av-min, -av_min, -d  Will prompt average minimum temperature of the week for that city.
+     --today, -t    Will prompt today's temperature for the passed city.
+     --av-max, -u  Will prompt average maximum temperature of the week for that city.
+     --av-min, -d  Will prompt average minimum temperature of the week for that city.
 
      PARAMETER
         The Barcelona's city of which you want to retrieve its temperature
@@ -71,6 +76,8 @@ $ eltiempo --help
 ```
 
 ### CLI Usage
+
+The `eltiempo` CLI is an example of the use of the `gem`. In any case, as mentioned, you need to have the `TIEMPO_API_KEY` env variable set in your system.
 
 ```
 $ TIEMPO_API_KEY=yourkey eltiempo -d Gavà

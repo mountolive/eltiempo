@@ -21,9 +21,9 @@ module Eltiempo
      weekly temperature, in Celsius degrees.
  
      FLAGS
-     --today, -today, -t    Will prompt today's temperature for the passed city.
-     --av-max, -av_max, -u  Will prompt average maximum temperature of the week for that city.
-     --av-min, -av_min, -d  Will prompt average minimum temperature of the week for that city.
+     --today, -t    Will prompt today's temperature for the passed city.
+     --av-max, -u  Will prompt average maximum temperature of the week for that city.
+     --av-min, -d  Will prompt average minimum temperature of the week for that city.
 
      PARAMETER
         The Barcelona's city of which you want to retrieve its temperature

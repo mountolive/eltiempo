@@ -10,15 +10,15 @@ Clamp do
     #  Basic command for retrieval of temperature data,
     #  in Celsius degrees, from the eltiempo's api, for the
     #  cities of Barcelona, through +city_name+
-    option ['-h', '-help', '--help'], :flag, 'Shows "eltiempo" help'
+    option ['-h', '--help'], :flag, 'Shows "eltiempo" help'
 
-    option ['-t', '-today', '--today'], :flag,
+    option ['-t', '--today'], :flag,
            'Returns the average temperature of today for the passed city'
 
-    option ['-u', '-av_max', '--av_max'], :flag,
+    option ['-u', '--av_max'], :flag,
            'Returns the average maximum temperature of the week for the passed city'
 
-    option ['-d', '-av_min', '--av_min'], :flag,
+    option ['-d', '--av_min'], :flag,
            'Returns the average minimum temperature of the week for the passed city'
 
     parameter '[CITY_NAME]', %q{Retrieves today\'s, average maximum and/or
