@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'eltiempo/cli/errors/unsupported_name_error'
+
 module Eltiempo
 
   ##
@@ -15,9 +17,12 @@ module Eltiempo
     #  plus the main parameter of the script.
     #
     #  returns [Main parameter, flag hash { name => value }]
+    #  both empty if argv is nil or empty
     def extract_flags(argv)
       # hash where flags will be registerd
       flags = {}
+      # the script was called with no arguments/flags
+      return [nil, {}] unless argv && argv.length > 0
       # last string is the main param (under certain conditions)
       last_str = argv.last
       # The script was called without flags
@@ -35,8 +40,8 @@ module Eltiempo
       argv[..argv.length - 2].each do |arg|
         # Means the previously parsed flag (saved on current_flag)
         # is a boolean flag
-        if current_flag && is_flag arg 
-          flags[current_flag] = true
+        if is_flag(arg)
+          flags[current_flag] = true if current_flag
           current_flag = arg
         elsif current_flag
           flags[current_flag] = arg
@@ -45,6 +50,8 @@ module Eltiempo
           raise Eltiempo::UnsupportedNameError.new arg
         end
       end
+      # Means the last element in the ARGV (not counting the param) was a flag
+      flags[current_flag] = true if current_flag
       [main_parameter, flags]
     end
  

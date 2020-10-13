@@ -70,7 +70,7 @@ $ eltiempo --help
      It can prompt today's temperature, average minimum and/or average maximum
      weekly temperature, in Celsius degrees.
 
-     Any combination of the following flags can be passed to the command
+     Any combination of the following flags can be passed to the command (at least one should be passed)
  
      FLAGS
      --today, -today, -t    Will prompt today's temperature for the passed city.
@@ -88,17 +88,24 @@ $ eltiempo --help
 The `eltiempo` CLI is an example of the use of the `gem`. In any case, as mentioned, you need to have the `TIEMPO_API_KEY` env variable set in your system.
 
 ```
-$ TIEMPO_API_KEY=yourkey eltiempo -av_min Gavà
+$ TIEMPO_API_KEY=yourkey eltiempo -today 'Gavà'
 
-Barcelona: Min temperature in Gavà for the week: 
-              9.8 celsius
+Barcelona: Today's (2020-10-13) temperature in Gavà is:
+                15.5 celsius
 
 ```
 
 You could also pass multiple parameters:
 
 ```
-$ TIEMPO_API_KEY=yourkey eltiempo -today -av_min --av_max Gavà
+$ TIEMPO_API_KEY=yourkey eltiempo -today -av_min -av_max gavà
+
+Barcelona: Today's (2020-10-13) temperature in Gavà is:
+                15.5 celsius
+Barcelona: Max temperature in Gavà for the week:
+                18.4 celsius
+Barcelona: Min temperature in Gavà for the week: 
+                9.4 celsius
 
 ```
 

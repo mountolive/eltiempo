@@ -20,7 +20,7 @@ module Eltiempo
      It can prompt today's temperature, average minimum and/or average maximum
      weekly temperature, in Celsius degrees.
 
-     Any combination of the following flags can be passed to the command
+     Any combination of the following flags can be passed to the command (at least one should be passed)
  
      FLAGS
      --today, -today, -t    Will prompt today's temperature for the passed city.
@@ -33,14 +33,14 @@ module Eltiempo
     }
     @@today_flags = %w{--today -today -t}
     @@av_max_flags = %w{--av_max -av_max -u}
-    @@av_min_flags = %w{--av_min -av_min -u}
+    @@av_min_flags = %w{--av_min -av_min -d}
     @@help_flags = %w{--help -help -h}
 
     ##
     #  Creates a CLI instance.
     #  The +flag_parser+ will be used to parse the flags from the command line
     def initialize(flag_parser)
-      @parser = flag_parser
+      @flag_parser = flag_parser
     end
 
     ## 
@@ -50,6 +50,8 @@ module Eltiempo
       parse_flags argv
       help = @@help_flags.any? { |h| @flags[h] }
       show_help if help
+      show_help unless @city
+      show_help if @flags.empty?
       today = @@today_flags.any? { |t| @flags[t] } 
       av_max = @@av_max_flags.any? { |u| @flags[u] } 
       av_min = @@av_min_flags.any? { |d| @flags[d] } 
@@ -63,13 +65,15 @@ module Eltiempo
       #  It also parses the city to be retrieved by this CLI command 
       #  assinging them to the instance variables +city+ and +flags+
       def parse_flags(argv)
-        @city, @flags = flag_parser.extract_flags argv
+        @city, @flags = @flag_parser.extract_flags argv
       end
 
       ##
       #  Main CLI's command.
       #
-      #  It takes the +city_name+ to be retrieved by the client (it should be a city in Barcelona),
+      #  It takes the +city_name+ to be retrieved by the client
+      #  (it should be a city in Barcelona).
+      #
       #  +today+ is a boolean that signals that today's weather should be retrieved
       #  +av_max+ is a boolean that signals that the average maximum temperature of the week
       #           shouled be printed
@@ -87,7 +91,7 @@ module Eltiempo
             exit 1
           end
           week_weather = client.get_weather_from_location_id(location.id)
-          puts "#{@@division_name}: Today's temperature in #{location.name} is:  
+          puts "#{@@division_name}: Today's (#{Date.today}) temperature in #{location.name} is:
                 #{week_weather.todays_temperature} celsius" if today
           puts "#{@@division_name}: Max temperature in #{location.name} for the week:
                 #{week_weather.average_max_temperature} celsius" if av_max
