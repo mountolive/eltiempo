@@ -19,6 +19,8 @@ module Eltiempo
      The "eltiempo" cli retrieves the temperature of any city in Barcelona.
      It can prompt today's temperature, average minimum and/or average maximum
      weekly temperature, in Celsius degrees.
+
+     Any combination of the following flags can be passed to the command
  
      FLAGS
      --today, -t   Will prompt today's temperature for the passed city.
