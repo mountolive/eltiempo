@@ -25,15 +25,15 @@ module Eltiempo
       return [nil, {}] unless argv && argv.length > 0
       # last string is the main param (under certain conditions)
       last_str = argv.last
-      # The script was called without flags
-      return [last_str, flags] if argv.length == 1
       # main parameter holder
       main_parameter = nil
       unless is_flag last_str
+        return [last_str, flags] if argv.length == 1
         main_parameter = last_str
       else
         # The script was called with no main param and a flag at the end
         flags[last_str] = true
+        return [nil, flags] if argv.length == 1
       end
       # Keeps track. Checks if we're tracing a flag
       current_flag = nil
@@ -45,6 +45,7 @@ module Eltiempo
           current_flag = arg
         elsif current_flag
           flags[current_flag] = arg
+          current_flag = nil
         else
           # Means this is nor a flag, nor a param
           raise Eltiempo::UnsupportedNameError.new arg
