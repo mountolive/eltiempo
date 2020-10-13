@@ -69,11 +69,14 @@ $ eltiempo --help
      The "eltiempo" cli retrieves the temperature of any city in Barcelona.
      It can prompt today's temperature, average minimum and/or average maximum
      weekly temperature, in Celsius degrees.
+
+     Any combination of the following flags can be passed to the command
  
      FLAGS
-     --today, -t   Will prompt today's temperature for the passed city.
-     --av-max, -u  Will prompt average maximum temperature of the week for that city.
-     --av-min, -d  Will prompt average minimum temperature of the week for that city.
+     --today, -today, -t    Will prompt today's temperature for the passed city.
+     --av_max, -av_max, -u  Will prompt average maximum temperature of the week for that city.
+     --av-min, -av_min, -d  Will prompt average minimum temperature of the week for that city.
+     --help, -help, -h      Will prompt this help menu (Ignoring any other param)
 
      PARAMETER
         The Barcelona's city of which you want to retrieve its temperature
@@ -85,10 +88,17 @@ $ eltiempo --help
 The `eltiempo` CLI is an example of the use of the `gem`. In any case, as mentioned, you need to have the `TIEMPO_API_KEY` env variable set in your system.
 
 ```
-$ TIEMPO_API_KEY=yourkey eltiempo -d Gavà
+$ TIEMPO_API_KEY=yourkey eltiempo -av_min Gavà
 
 Barcelona: Min temperature in Gavà for the week: 
               9.8 celsius
+
+```
+
+You could also pass multiple parameters:
+
+```
+$ TIEMPO_API_KEY=yourkey eltiempo -today -av_min --av_max Gavà
 
 ```
 

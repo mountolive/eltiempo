@@ -8,4 +8,4 @@ Dotenv.load
 require 'eltiempo/version'
 require 'eltiempo/client/client'
 require 'eltiempo/parser/response_parser'
-
+require 'eltiempo/cli/custom_flag_parser'

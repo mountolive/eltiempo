@@ -9,7 +9,6 @@ require 'eltiempo/parser/errors/missing_days_array_error'
 require 'eltiempo/parser/errors/report_not_present_error'
 require 'eltiempo/parser/response_parser'
 
-
 require 'spec_helper'
 
 describe Eltiempo::ResponseParser do

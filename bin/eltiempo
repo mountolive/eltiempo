@@ -1,33 +1,8 @@
 #!/usr/bin/env ruby
 $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 
-require 'eltiempo/cli/barcelona_cli'
-require 'clamp'
+require 'eltiempo/cli/barcelona-example/barcelona_cli'
+require 'eltiempo/cli/custom_flag_parser' 
 
-Clamp do
-
-    ##
-    #  Basic command for retrieval of temperature data,
-    #  in Celsius degrees, from the eltiempo's api, for the
-    #  cities of Barcelona, through +city_name+
-    option ['-h', '--help'], :flag, 'Shows "eltiempo" help'
-
-    option ['-t', '--today'], :flag,
-           'Returns the average temperature of today for the passed city'
-
-    option ['-u', '--av_max'], :flag,
-           'Returns the average maximum temperature of the week for the passed city'
-
-    option ['-d', '--av_min'], :flag,
-           'Returns the average minimum temperature of the week for the passed city'
-
-    parameter '[CITY_NAME]', %q{Retrieves today\'s, average maximum and/or
-                                minimum temperature from CITY_NAME,
-                                a city from Barcelona}, attribute_name: :city_name
-
-    def execute
-      cli = Eltiempo::BarcelonaCLI.new
-      cli.show_help if help?
-      cli.barcelona_temperature(city_name, today?, av_min?, av_max?)
-    end
-end
+command = Eltiempo::BarcelonaCLI.new Eltiempo::CustomFlagParser.new
+command.start(ARGV)
