@@ -3,6 +3,12 @@ $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 
 require 'eltiempo/cli/barcelona-example/barcelona_cli'
 require 'eltiempo/cli/custom_flag_parser' 
+require 'eltiempo/cli/errors/unsupported_name_error'
 
 command = Eltiempo::BarcelonaCLI.new Eltiempo::CustomFlagParser.new
-command.start(ARGV)
+begin
+  command.start(ARGV)
+rescue Eltiempo::UnsupportedNameError => e
+  puts "Seems like some of the flags passed are invalid: #{e.message}"
+  exit 1
+end

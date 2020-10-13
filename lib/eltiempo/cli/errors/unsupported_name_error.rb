@@ -7,7 +7,7 @@ module Eltiempo
   #  +name+ should be the invalidating flag
   class UnsupportedNameError < StandardError
     def initialize(name = '')
-      super("The flag #{name} is invalid")
+      super("The flag '#{name}' is invalid")
     end
   end
 end
