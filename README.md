@@ -2,7 +2,8 @@
 
 The `eltiempo` wraps a client and a corresponding parser for retrieving weather data from [eltiempo](https://www.tiempo.com/api/)'s api
 
-An example CLI is also provided. This can retrieve today's temperature, and current week's maximum and minimum average temperature.
+An example CLI is also provided. This can retrieve today's temperature, and current week's maximum and minimum average temperature of any
+registered city in Barcelona, Spain.
 
 ## Requirements
 
@@ -24,7 +25,7 @@ Or install it yourself as:
 
     $ gem install eltiempo
 
-It's neccessary a proper `eltiempo`'s API key to be able to retrieve data.
+It's necessary a proper `eltiempo`'s API key to be able to retrieve data.
 Both the CLI and the `gem` expect a `TIEMPO_API_KEY` environment variable to be set.
 
 If you're using [dotenv](https://github.com/bkeepers/dotenv) in your project,

@@ -13,12 +13,12 @@ module Eltiempo
 
   ##
   #  Helper class that parses usual responses from eltiempo's API
-  #  to regular data objects (defined in '../models')
+  #  to regular weather-related objects (defined in '../models')
   class ResponseParser
 
     ##
     #  Checks whether the received xml object, as +xmldata+,
-    #  from the api is an error object or not.
+    #  from the api is an error object (ApiErrorDto) or not.
     #
     #  throws ReportNotPresentError if the root tag of the object
     #  (`report`) is missing
@@ -33,7 +33,7 @@ module Eltiempo
 
     ##
     #  Checks whether the received json object, as +jsondata+,
-    #  from the api is an error object or not.
+    #  from the api is an error object (ApiErrorDto) or not.
     #
     #  Returns nil if it's not an error object
     def check_if_error_json(jsondata)
@@ -50,7 +50,7 @@ module Eltiempo
     #  creating a Division with the retrieved Locations,
     #  the Division will have +div_name+ name and +div_id+ id
     #
-    #  throws ReportNotPresentError if the root tag of the object
+    #  throws ReportNotPresentError if the root tag of the xml object
     #  (`report`) is missing
     #
     #  returns a complete (Locations included) Division instance
@@ -61,7 +61,7 @@ module Eltiempo
       raw_locations = report[:location]
       division = Eltiempo::Division.new div_name, div_id
       # Missing the location tag.
-      return division if raw_locations.nil?
+      return division if raw_locations.nil? || raw_locations.empty?
       raw_locations.each do |data|
         if data[:data]
           content = data[:data]

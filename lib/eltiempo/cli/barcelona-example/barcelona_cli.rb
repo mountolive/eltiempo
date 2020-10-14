@@ -48,10 +48,10 @@ module Eltiempo
     #  Parses the flags in +argv+ and executes accordingly.
     def start(argv)
       parse_flags argv
-      help = @@help_flags.any? { |h| @flags[h] }
-      show_help if help
       show_help unless @city
       show_help if @flags.empty?
+      help = @@help_flags.any? { |h| @flags[h] }
+      show_help if help
       today = @@today_flags.any? { |t| @flags[t] } 
       av_max = @@av_max_flags.any? { |u| @flags[u] } 
       av_min = @@av_min_flags.any? { |d| @flags[d] } 
@@ -99,19 +99,19 @@ module Eltiempo
                 #{week_weather.average_min_temperature} celsius" if av_min
           exit 0
         rescue Eltiempo::MissingApiKeyError => e
-          puts 'Please set your `TIEMPO_API_KEY` environment variable in your system'
+          puts 'Please set your `TIEMPO_API_KEY` environment variable in your system.'
           exit 1
         rescue Eltiempo::ResponseNotOkError => e
-          puts 'The request to the API returned a non-Ok code, aborting'
+          puts 'The request to the API returned a non-Ok code.'
           exit 1
         rescue Eltiempo::WrongContentTypeError => e
-          puts 'The response of the API as an unexpected content_type, aborting'
+          puts 'The response of the API as an unexpected content_type.'
           exit 1
         rescue Eltiempo::StandardApiError => e
-          puts "Seems like the api returned the following error: #{e.message}"
+          puts "Seems like the api returned the following error: #{e.message}."
           exit 1
         rescue StandardError => e
-          puts "An unknown error occurred (#{e.message}), aborting"
+          puts "An unknown error occurred (#{e.message})."
           exit 1
         end
       end

@@ -50,7 +50,7 @@ module Eltiempo
 
     ##
     #  Creates the Client's instance that will pull data from
-    #  the eltiempo's api, and convert it using the +parser+
+    #  the eltiempo's api, and converts it using the +parser+
     def initialize(parser)
       @parser = parser
       @api_url = "#{Eltiempo::base_url}?affiliate_id=#{Eltiempo::Client.api_key}"

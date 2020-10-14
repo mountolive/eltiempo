@@ -3,8 +3,9 @@
 module Eltiempo
 
   ##
-  #  Data object that holds information about a given division
-  #  from the api (i.e. 'Barcelona').
+  #  Object that holds information about a given division
+  #  from the api (i.e. 'Barcelona'), with corresponding api for retrieving
+  #  location's weather information
   class Division
     attr_reader :id, :name, :locations
 
@@ -41,8 +42,8 @@ module Eltiempo
     #  If no location is found, returns nil.
     #
     #  === Example
-    #      location = { 'test' => Location }
-    #      division.get_location('tEsT') will return `location`
+    #      location = { 'test' => my_location }
+    #      division.get_location('tEsT') will return `my_location`
     def get_location(name)
       @locations[name.downcase]
     end

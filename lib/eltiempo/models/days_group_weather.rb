@@ -14,7 +14,7 @@ module Eltiempo
 
     ##
     #  Creates a DaysGroupWeather instances that holds the passed
-    #  +days+, a DayWeather array corresponding to a given group of days
+    #  +days+, a DayWeather array corresponding to a given group of days'
     #  weather data
     def initialize(days)
       @days = days
