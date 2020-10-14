@@ -99,6 +99,15 @@ module Eltiempo
       @parser.daysweather_from_json(response.body.to_s)
     end
 
+    ##
+    #  Changes default timeout (60 seconds) of the
+    #  HTTP (https://github.com/httprb/http) client used internally
+    #
+    #  +seconds+ is the number of seconds the user would like for the timeout
+    def set_http_timeout(seconds)
+      HTTP::timeout(seconds)
+    end
+
     private
 
       ##
