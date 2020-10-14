@@ -37,6 +37,8 @@ the gem will be able to pick up the variable from there also.
 ```ruby
 require 'eltiempo'
 
+client = Eltiempo::Client.new Eltiempo::ResponseParser.new
+
 # Retrieving locations associated to division, from api
 division = client.get_locations_from_division_id(division_id, division_name)
 # Retrieving location by the passed name
