@@ -49,6 +49,15 @@ module Eltiempo
     end
 
     ##
+    #  Changes default timeout (60 seconds) of the
+    #  HTTP (https://github.com/httprb/http) client used internally
+    #
+    #  +seconds+ is the number of seconds the user would like for the timeout
+    def self.set_http_timeout(seconds)
+      HTTP::timeout(seconds)
+    end
+
+    ##
     #  Creates the Client's instance that will pull data from
     #  the eltiempo's api, and converts it using the +parser+
     def initialize(parser)
@@ -97,15 +106,6 @@ module Eltiempo
       response = HTTP.get("#{@api_url}&localidad=#{location_id}&v=3.0")
       validate_if_api_error(response)
       @parser.daysweather_from_json(response.body.to_s)
-    end
-
-    ##
-    #  Changes default timeout (60 seconds) of the
-    #  HTTP (https://github.com/httprb/http) client used internally
-    #
-    #  +seconds+ is the number of seconds the user would like for the timeout
-    def set_http_timeout(seconds)
-      HTTP::timeout(seconds)
     end
 
     private
